@@ -184,6 +184,7 @@ if __name__ == '__main__':
 
     # optional-options. (also fun to say.)
     parser.add_argument("-u", "--user", help="specify a non-default username")
+    parser.add_argument("-c", "--command", help="enter a simple command to remotely-execute.")
 
     # required step
     args = parser.parse_args()
@@ -196,7 +197,11 @@ if __name__ == '__main__':
     host_name = verify_input(args.vm_name)
 
     # explicit is better than implicit
-    if args.user:
+    if args.user and args.command:
+        main(host_name=host_name, user=args.user, command=args.command)
+    elif args.command:
+        main(host_name=host_name, command=args.command)
+    elif args.user:
         main(host_name=host_name, user=args.user)
     else:
         main(host_name=host_name)
