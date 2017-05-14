@@ -1,5 +1,6 @@
 Connect
 =======
+[![py2badge](https://img.shields.io/badge/Python-2.7-blue.svg)]
 
 # WHAT IS IT?:
 #### It's a replacement for `$ ssh -i <private-keyfile> [username@[some_host]]`
