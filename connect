@@ -1,0 +1,214 @@
+#!/usr/bin/env python
+
+from os.path import realpath as rlpth
+from os import execlp
+import sys
+import subprocess
+import argparse
+__doc__ = """
+IMPORTANT:
+    - WELCOME TO ROB's IN-FILE README.
+
+
+STEPS:
+    1. Start by looking at the bottom of the module.
+
+    2. Locate *both* `#TODO: CHANGE ME` comments 
+       and read their corresponding instructions. 
+    
+    3. (optional) Look for triple-quoted blocks beginning
+       with: `IMPORTANT`.
+
+
+MORE DETAILED STEPS:
+    1. Start by looking at the bottom of the module.
+        a) The `if __name__ == '__main__':` & the `def main():`
+           code-blocks are where the magic happens.  
+        b) Anything above `def main():` gets implemented below
+           `def main():`.
+        c) Then, once you understand the general program-flow...
+
+    2. Locate both `#TODO: CHANGE ME` comments and read their
+       corresponding instructions.
+        a) The 1st `#TODO:` comment urges you to fill out your
+           typo/shorthand dictionary, which acts sort of like
+           auto-correct.
+        b) The 2nd `#TODO:` comment urges you to fill out your 
+           private-key + user@hostname mappings. 
+    
+    3. (optional) Look for triple-quoted blocks beginning with: `IMPORTANT`.
+        a) idk. I write a lot. 
+"""
+
+class ImpossibleError(BaseException):
+    # for else-statements that should never happen.
+    pass
+
+
+def verify_input(vmname, username=None):
+    assert isinstance(vmname, str), 'vmname passed in is not type=string'
+    vm_name = vmname.lower()
+
+    # lets make a semi-protected object-type to house our vals
+    class OkValues(object):
+        __doc__ = """
+        IMPORTANT: 
+            - This is your typo-dictionary. CHANGE IT.
+
+            - the 1st column corresponds to potential typos
+            - the 2nd column maps to the real hostname that was likely meant.
+        """
+
+        #TODO: CHANGE ME
+        translator_dict = dict([ 
+            ('wh1' , 'webhost1'),
+            ('wh2' , 'webhost2'),
+            ######################################################
+            # You can make more than 1 typo-catcher per hostname.
+            # observe:
+            ('h3' , 'dbhost3'),
+            ('hst3', 'dbhost3'),
+            ('db3', 'dbhost3'),
+            ('hostermchosteypants', 'dbhost3'),
+            ################################
+            ('ghostfour' , 'sechost4'),
+            ('h4' , 'sechost4'),
+        ])
+
+        @classmethod
+        def __repr__(cls):
+            return cls.translator_dict
+
+
+    vals = OkValues().__repr__()
+    """
+    IMPORTANT:
+
+    Now for some logic. Check out the line below that says:
+       -  set([ vals[x] for x in vals.keys() if (vm_name in x)])
+    
+    this list comprehension spits out a deduped set of the partial matches 
+    which correlate to the keys in the dict above.
+    
+    This is useful because one can:
+      a.) prevent autocompletions that match more than one hostname.
+      b.) display autocompletion possibilities in that case (if one so desires.)
+      c.) allow many different keys to map to 1 value without conflicts.
+    """
+    vmset = set([ vals[x] for x in vals.keys() if (vm_name in x)])
+    
+    if not vmset:
+        raise argparse.ArgumentError('you must specify a known host.\n Current known hosts are:\n{}'.format('\n'.join(set(vals.values()))))
+    # COMMENT OUT THE FOLLOWING elif CLAUSE TO PREVENT AUTOSUGGESTIONS.
+    elif len(vmset) > 1:
+        print 'Did you mean one of these?:\n'.format('\n'.join(list(vmset)))
+    elif len(vmset) == 1:
+        return list(vmset)[0]
+
+    else: raise ImpossibleError('no')
+
+
+def assoc_info(host_name, user_name):
+    __doc__ = """
+    IMPORTANT IMPORTANT IMPORTANT IMPORTANT:
+     
+     - pathdict is important
+
+
+    Here's the format of what you're looking at below:
+     - `{'hostname' : ('/path/to/private/key/file.openssh', 'user@www.foo-domain.com')}
+          ^--|---^      ^---------------|---------------^    ^-----------|---------^
+             |                          |                                |
+        the name of the           for ssh's -i                      let's take a                      
+        box to ssh into              option                          wild guess
+    
+    - make sure you get these mappings right or nothing will work.
+
+    """
+    #TODO: CHANGE ME
+    pathdict = dict([
+            ('webhost1' , (rlpth('/home/foo_user/.ssh/WebHost1.pem'), '{}@www1.example-site.com'.format(user_name))),
+            ('webhost2' , (rlpth('/home/foo_user/.ssh/web2.openssh'), '{}@www2.example-site.com'.format(user_name))),
+            ('dbhost3' , (rlpth('/home/foo_user/.ssh/DBServer.openssh'),'{}@backend.example-site.com'.format(user_name))), 
+            ('sechost4' , (rlpth('/home/foo_user/.ssh/SecretSecurityAppliance.openssh'), '{}@x7681a3c9c2ff.example-site.com'.format(user_name))),
+            ])
+    assert host_name in pathdict.keys()
+    return pathdict[host_name]
+
+
+def run_ssh_w_command(key, host, command):
+    # Ports are handled in ~/.ssh/config since we use OpenSSH
+    ssh = subprocess.Popen(["ssh","-i", key, "%s" % host, command],
+                           shell=False,
+                           stdout=subprocess.PIPE,
+                           stderr=subprocess.PIPE)
+    result = ssh.stdout.readlines()
+    if result == []:
+        error = ssh.stderr.readlines()
+        print >>sys.stderr, "ERROR: %s" % error
+    else:
+        print result
+
+
+def run_ssh(key, host):
+    # yes it is apperently this simple.
+    execlp('ssh', 'ssh', '-i', key, host)
+
+####################################################################################################
+
+def main(host_name, user='foo_user', command=None):
+    __doc__ = """
+    IMPORTANT:
+        
+        Do you frequently use ssh with the `-i` option 
+        & find yourself struggling to remember:
+        
+         - /the/path/to/the/right/keyfile.openssh 
+         - TheRightUserName@the-correct-domain.com
+        
+        Well worry no more! Just:
+         - Modify 2 dictionaries in this module,
+         - Place this file somewhere in your $PATH
+         - Make it executable
+         - from the shell of your choice enter:
+            
+            ```sh         
+            $ connect host1
+            Warning: Permanently added the RSA host key for IP address 'xxx.xxx.xxx.xxx' 
+            to the list of known hosts.
+            Enter passphrase for key '/path/to/host1/keyfile.openssh': 
+            ```        
+        shizzizam.
+
+    """
+    key, host = assoc_info(host_name, user_name=user)
+    if not command:    
+        run_ssh(key=key, host=host)
+    else:
+        run_ssh_w_command(key=key, host=host, command=command)
+    
+if __name__ == '__main__':
+    # instantiate the parser
+    parser = argparse.ArgumentParser()
+    
+    # mandatory positional arg. (NARRRGS!!!!!!)
+    parser.add_argument("vm_name", nargs='?', help="the name of the host you want to get into")
+    
+    # optional-options. (also fun to say.)
+    parser.add_argument("-u", "--user", help="specify a non-default username")
+    
+    # required step
+    args = parser.parse_args()
+    
+    # 'member I said mandatory.
+    if not args.vm_name:
+        raise argparse.ArgumentError(argument="vm_name", message="PLEASE SPECIFY A HOST")
+    
+    # Input-sanitizing!!!...HOOOORAYYYY EVERYONES FAVORITE SUBJECT HOOORAY.
+    host_name = verify_input(args.vm_name)
+    
+    # explicit is better than implicit
+    if args.user:
+        main(host_name=host_name, user=args.user)
+    else:
+        main(host_name=host_name)
