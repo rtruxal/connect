@@ -5,6 +5,22 @@ Connect
 ####It's a replacement for `$ ssh -i <private-keyfile> [username@[some_host]]`
 ####Instead just type: `$ connect some_host`
 
+#THE INNARDS:
+```py
+"""
+  - the pathdict variable is important.
+
+  - Here's the format of pathdict:
+    - `{'hostname' : ('/path/to/private/key/file.openssh', 'user@www.foo-domain.com')}
+         ^--|---^      ^---------------|---------------^    ^-----------|---------^
+            |                          |                                |
+       the name of the           for ssh's -i                      let's take a
+       box to ssh into              option                          wild guess
+
+  - make sure you get these mappings right or nothing will work.
+"""
+```
+
 #REQUIREMENTS:
  - A UNIX-based OS. (That means Linux & Mac if you're new to computa's)
  - Python 2.7 (Help with supporting python3 is welcome!)
