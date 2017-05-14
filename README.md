@@ -5,6 +5,18 @@ Connect
 #### It's a replacement for `$ ssh -i <private-keyfile> [username@[some_host]]`
 #### Instead just type: `$ connect host_nickname`
 
+# DIRECTIONS:
+ 1.  Modify 2 dictionaries inside the `connect` file. (the `dict`s are called `translator_dict` & `pathdict`)
+ 2.  Place this file somewhere in your $PATH (Ex: `~/bin/connect` or `/usr/bin/connect`)
+ 3.  Make it executable (Ex: `chmod u+x ~/bin/connect`)
+ 4.  from the shell of your choice enter:
+ ```sh
+     $ connect host1
+     Warning: Permanently added the RSA host key for IP address 'xxx.xxx.xxx.xxx'
+     to the list of known hosts.
+     Enter passphrase for key '/path/to/host1/keyfile.openssh':
+ ```
+
 # THE INNARDS:
 ```py
 """
@@ -29,17 +41,6 @@ Connect
  - TheRightUserName@the-correct-domain.com
 #### Well worry no more! Just:...
 
-# DIRECTIONS:
- 1.  Modify 2 dictionaries inside the script. (They are called `translator_dict` & `pathdict`)
- 2.  Place this file somewhere in your $PATH (Ex: `~/bin/connect` or `/usr/bin/connect`)
- 3.  Make it executable (Ex: `chmod u+x ~/bin/connect`)
- 4.  from the shell of your choice enter:
- ```sh
-     $ connect host1
-     Warning: Permanently added the RSA host key for IP address 'xxx.xxx.xxx.xxx'
-     to the list of known hosts.
-     Enter passphrase for key '/path/to/host1/keyfile.openssh':
- ```
 
 
 #### shizzizam.
