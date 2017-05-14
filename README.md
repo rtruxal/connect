@@ -3,7 +3,7 @@ Connect
 
 # WHAT IS IT?:
 #### It's a replacement for `$ ssh -i <private-keyfile> [username@[some_host]]`
-#### Instead just type: `$ connect some_host`
+#### Instead just type: `$ connect host_nickname`
 
 # THE INNARDS:
 ```py
@@ -16,13 +16,11 @@ Connect
             |                          |                                |
        the name of the           for ssh's -i                      let's take a
        box to ssh into              option                          wild guess
-
-  - make sure you get these mappings right or nothing will work.
 """
 ```
 
 # REQUIREMENTS:
- - A UNIX-based OS. (That means Linux & Mac if you're new to computa's)
+ - A UNIX-based OS. (No Windows unfortunately. `os.execlp()` is the culprit-requirement.)
  - Python 2.7 (Help with supporting python3 is welcome!)
 
 # SALES PITCH:
