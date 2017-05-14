@@ -165,31 +165,10 @@ def run_ssh(key, host):
 ####################################################################################################
 
 def main(host_name, user='foo_user', command=None):
-    __doc__ = """
-    IMPORTANT:
-
-        Do you frequently use ssh with the `-i` option 
-        & find yourself struggling to remember:
-
-         - /the/path/to/the/right/keyfile.openssh 
-         - TheRightUserName@the-correct-domain.com
-
-        Well worry no more! Just:
-         - Modify 2 dictionaries in this module,
-         - Place this file somewhere in your $PATH
-         - Make it executable
-         - from the shell of your choice enter:
-
-            ```sh         
-            $ connect host1
-            Warning: Permanently added the RSA host key for IP address 'xxx.xxx.xxx.xxx' 
-            to the list of known hosts.
-            Enter passphrase for key '/path/to/host1/keyfile.openssh': 
-            ```        
-        shizzizam.
-
-    """
+    # This calls the primary mapping function, providing us with our ssh args.
     key, host = assoc_info(host_name, user_name=user)
+
+    # again, explicit is better than implicit.
     if not command:
         run_ssh(key=key, host=host)
     else:
