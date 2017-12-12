@@ -2,9 +2,18 @@ Connect
 =======
 [![py2badge](https://img.shields.io/badge/Python-2.7-blue.svg)]
 
+# Before We Begin!
+THERE ARE BETTER WAYS TO DO THIS...FOR EXAMPLE JUST EDIT `~/.ssh/config`
+Here's a link right [here.](http://nerderati.com/2011/03/17/simplify-your-life-with-an-ssh-config-file/)  
+
+
+
 # WHAT IS IT?:
-#### It's a replacement for `$ ssh -i <private-keyfile> [username@[some_host]]`
+#### It's a replacement for `$ ssh -i <private-keyfile> [username]@<some_host>`
 #### Instead just type: `$ connect host_nickname`
+#### Also it's a simple ssh-engine...kinda like a reeeeeaaaaly small & crappy version of Ansible made by 1 person.
+...
+#### USE IT FOR LEARNING!...Like I did!
 
 # DIRECTIONS:
  1.  Modify 2 dictionaries inside the `connect` file. (the `dict`s are called `translator_dict` & `pathdict`)
